@@ -16,10 +16,10 @@ final class studentRepository {
     public String getName() {return(name);}
 
     public void addGrade(Integer grade) {
-        if (g < Config.MIN_GRADE || g > Config.MAX_GRADE) {
+        if (grade < Config.MIN_GRADE || grade > Config.MAX_GRADE) {
             throw new IllegalArgumentException("Grade must be between " + Config.MIN_GRADE + " and " + Config.MAX_GRADE + ".");
         }
-        grades.add(g);
+        grades.add(grade);
     }
 
     public void setGrades(List<Integer> grades) {this.grades = grades;}

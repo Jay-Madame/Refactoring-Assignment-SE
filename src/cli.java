@@ -50,7 +50,13 @@ final class GradeBookApp {
     }
 
     private void recordGrade() {
-        String name = inputToUse.prompt("Student name: ");
+        System.out.println("You currently have no students entered.");
+        String addStudentPrompt = inputToUse.prompt("Would you like to add a student? (Y/N): ");
+        if (addStudentPrompt.equalsIgnoreCase("Y")) {
+            addStudent();
+        }
+        listStudents();
+        String name = inputToUse.prompt("Select which student to add a grade to: ");
         Student student = gradebook.find(name).orElseThrow(() -> new IllegalArgumentException("No such student."));
         int grade = inputToUse.promptIntInRange("Grade (" + Config.MIN_GRADE + "-" + Config.MAX_GRADE + "): ", Config.MIN_GRADE, Config.MAX_GRADE);
         student.addGrade(grade);
@@ -61,15 +67,26 @@ final class GradeBookApp {
     }
 
     private void listStudents() {
+        if (gradebook.listAll().isEmpty()) {
+            System.out.println("You currently have no students entered.");
+            String addStudentPrompt = inputToUse.prompt("Would you like to add a student? (Y/N): ");
+            if (addStudentPrompt.equalsIgnoreCase("Y")) {
+                addStudent();
+            }
+            return;
+        }
         System.out.println("Students:");
-        if (gradebook.listAll().isEmpty()) { System.out.println(" (none)"); return; }
         gradebook.listAll().forEach(s -> System.out.println(Format.studentLine(s)));
     }
 
     private void showClassAverage() {
         double avg = gradebook.classAverage();
         if (Double.compare(avg, 0.0) == 0 && gradebook.listAll().stream().allMatch(s -> s.grades().isEmpty())) {
-            System.out.println("No grades.");
+            String addGradesPrompt = inputToUse.prompt("No grades. Would you like to add some grades?");
+            if (addGradesPrompt.equalsIgnoreCase("Y")) {
+                recordGrade();
+            }
+
         } else {
             System.out.println("Class average = " + Format.avg(avg));
         }

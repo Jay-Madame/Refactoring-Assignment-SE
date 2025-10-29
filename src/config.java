@@ -26,7 +26,8 @@ final class Input {
 
     int promptInt(String msg) {
         String s = prompt(msg);
-        try { return Integer.parseInt(s); } catch (NumberFormatException e) { throw new IllegalArgumentException("Not a number."); }
+        try { return Integer.parseInt(s); }
+        catch (NumberFormatException e) { throw new IllegalArgumentException("Not a number."); }
     }
 
     int promptIntInRange(String msg, int lo, int hi) {
